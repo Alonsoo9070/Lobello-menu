@@ -4,7 +4,7 @@
             const texto = document.getElementById('status-texto');
             
             const ahora = new Date();
-            const dia = ahora.getDay(); // 0 = Domingo, 1 = Lunes ... 6 = Sábado
+            const dia = ahora.getDay();
             const hora = ahora.getHours();
             const minutos = ahora.getMinutes();
             const horaDecimal = hora + (minutos / 60);
@@ -56,10 +56,9 @@
                 if (entry.isIntersecting) {
                     const card = entry.target;
                     card.classList.add('visible');
-                    // Limpia el transitionDelay una vez visible para que el hover y clic sean instantáneos
                     setTimeout(() => {
                         card.style.transitionDelay = '0s';
-                    }, 600);
+                    }, 550);
                     observer.unobserve(card);
                 }
             });
@@ -201,25 +200,73 @@
             });
         }
 
+        // --- 4. ANIMACIÓN FLIP OPTIMIZADA A 60FPS ---
+        function animarCambioTarjeta(card, accionDOM, alTerminar) {
+            card.style.transitionDelay = '0s';
+            
+            // FIRST: Medir geometría inicial
+            const first = card.getBoundingClientRect();
+
+            // Ejecutar cambio de clase en el DOM
+            accionDOM();
+
+            // LAST: Medir geometría final
+            const last = card.getBoundingClientRect();
+
+            // INVERT: Calcular diferencia y volver visualmente al estado inicial con GPU
+            const deltaX = first.left - last.left;
+            const deltaY = first.top - last.top;
+            const scaleX = first.width / last.width;
+            const scaleY = first.height / last.height;
+
+            card.classList.add('animando-flip');
+            card.style.transition = 'none';
+            card.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`;
+
+            // Forzar reflow
+            card.offsetHeight;
+
+            // PLAY: Interpolar suavemente hacia el tamaño y posición final
+            requestAnimationFrame(() => {
+                card.style.transition = 'transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.25s ease';
+                card.style.transform = 'translate(0, 0) scale(1, 1)';
+            });
+
+            setTimeout(() => {
+                card.classList.remove('animando-flip');
+                card.style.transition = '';
+                card.style.transform = '';
+                if (alTerminar) alTerminar();
+            }, 390);
+        }
+
         function toggleExpandir(id, btn) {
             const card = document.getElementById(id);
             const estabaExpandida = card.classList.contains('expandida');
 
-            // Cerrar cualquier otra abierta primero
+            // Cerrar cualquier otra tarjeta abierta primero
             document.querySelectorAll('.card.expandida').forEach(c => {
-                c.classList.remove('expandida');
-                c.querySelector('.btn-expandir').innerHTML = 'Ver Detalle';
+                if (c !== card) {
+                    c.classList.remove('expandida');
+                    c.querySelector('.btn-expandir').innerHTML = 'Ver Detalle';
+                }
             });
 
             if (!estabaExpandida) {
-                card.style.transitionDelay = '0s';
-                card.classList.add('expandida');
-                btn.innerHTML = 'Cerrar';
-
-                // Esperar al siguiente frame tras el reflow del grid para hacer scroll suave sin tirones
-                requestAnimationFrame(() => {
-                    const y = card.getBoundingClientRect().top + window.scrollY - 110;
-                    window.scrollTo({ top: y, behavior: 'smooth' });
+                animarCambioTarjeta(card, () => {
+                    card.classList.add('expandida');
+                    btn.innerHTML = 'Cerrar';
+                }, () => {
+                    const rect = card.getBoundingClientRect();
+                    if (rect.top < 95 || rect.bottom > window.innerHeight) {
+                        const y = rect.top + window.scrollY - 110;
+                        window.scrollTo({ top: y, behavior: 'smooth' });
+                    }
+                });
+            } else {
+                animarCambioTarjeta(card, () => {
+                    card.classList.remove('expandida');
+                    btn.innerHTML = 'Ver Detalle';
                 });
             }
         }
