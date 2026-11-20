@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobello | Menú de Autor</title>
+    
+    <link rel="icon" type="image/jpeg" href="Logo.jpeg">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+
+</head>
+<body>
+
+    <!-- Navegación -->
+    <nav class="navbar">
+        <a href="#" class="nav-brand">LOBELLO<span>.</span></a>
+        <div class="nav-links">
+            <a href="#menu">Menú</a>
+            <a href="#contacto">Contacto</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="luz-fondo luz-1"></div>
+        <div class="luz-fondo luz-2"></div>
+        
+        <div class="logo-container">
+            <img src="Logo.jpeg" alt="Lobello" onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='block';">
+            <div class="logo-fallback">L</div>
+        </div>
+        
+        <div class="hero-titulo-container">
+            <h1>
+                <span style="animation-delay: 0.1s">L</span>
+                <span style="animation-delay: 0.25s">o</span>
+                <span style="animation-delay: 0.4s">b</span>
+                <span style="animation-delay: 0.55s">e</span>
+                <span style="animation-delay: 0.7s">l</span>
+                <span style="animation-delay: 0.85s">l</span>
+                <span style="animation-delay: 1.0s">o</span>
+            </h1>
+        </div>
+        
+        <div class="hero-eslogan-container">
+            <p class="eslogan-texto" id="eslogan"></p>
+            <span class="cursor-typewriter" id="cursor"></span>
+        </div>
+        
+        <div class="status-badge" id="status-badge">
+            <span class="status-dot"></span>
+            <span id="status-texto">Cargando...</span>
+        </div>
+    </header>
+
+    <!-- Filtros -->
+    <div class="filtros-wrapper" id="filtros-container">
+        <button class="btn-filtro activo" onclick="filtrarProductos('todos', this)">Todos</button>
+    </div>
+
+    <!-- Catálogo -->
+    <main class="catalogo" id="menu">
+        <div id="contenedor-productos">
+            <p style="text-align: center; color: var(--texto-gris); font-family: var(--fuente-titulo); font-size: 1.2rem;">Iniciando experiencia...</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="contacto">
+        <h2>Conecta con Lobello</h2>
+        <div class="contacto-grid">
+            <a href="https://www.whatsapp.com/catalog/56954579142/?app_absent=0" target="_blank" class="btn-contacto">WhatsApp ↗</a>
+            <a href="https://www.instagram.com/lobello/" target="_blank" class="btn-contacto">Instagram ↗</a>
+            <a href="https://maps.google.com/?q=Sotomayor+1197,+Tome" target="_blank" class="btn-contacto">Ubicación ↗</a>
+        </div>
+        <div class="footer-info">
+            <strong>Horario</strong> · Lunes a Sábado<br>
+            12:00 – 21:00 · Domingo cerrado<br><br>
+            © 2026 Lobello.
+        </div>
+    </footer>
+
+<script src="lobello.js"></script>
+</body>
+</html>
