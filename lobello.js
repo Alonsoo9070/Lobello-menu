@@ -176,7 +176,7 @@
                     `<span class="precio-final">${precio}</span>`;
 
                 const mensajeWA = encodeURIComponent(`Hola Lobello! Quisiera pedir: ${prod.nombre} (${precioFinalTexto})`);
-                const linkWA = `https://wa.me/56954579142?text=${mensajeWA}`;
+                const linkWA = `https://wa.me/56999576855?text=${mensajeWA}`;
 
                 card.innerHTML = `
                     <div class="card-img-wrapper">
